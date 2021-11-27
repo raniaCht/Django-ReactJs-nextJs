@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djoser',
     'accounts',
     'rest_framework_simplejwt.token_blacklist',
+    'serviceowners',
 ]
 
 MIDDLEWARE = [
@@ -194,5 +195,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
