@@ -34,7 +34,6 @@ class ServiceOwnerCreateView(APIView):
         ext = format.split('/')[-1]
         return ContentFile(base64.b64decode(imgstr), name=uuid4().hex + "." + ext)
 
-
     def post(self, request):
         try:
             user = request.user
