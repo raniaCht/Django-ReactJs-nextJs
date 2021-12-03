@@ -45,7 +45,7 @@ export default function CustomDrawer() {
                     </Link>
                 ))}
                 <Divider />
-                <Link href="/SignUpAsOwnerService" passHref>
+                <Link href="/newServiceOwner" passHref>
                     <ListItem
                         button
                         sx={{ position: "absolute", bottom: "5px" }}
