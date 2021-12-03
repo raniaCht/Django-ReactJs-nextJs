@@ -76,7 +76,8 @@ class ServiceOwnerCreateView(APIView):
                 return Response({'error': 'you aren\'t a service owner'},
                     status=status.HTTP_404_NOT_FOUND
                 )
-        except:
+        except Exception as e:
+            print(e)
             return Response(
                 {'error': 'Something went wrong when trying to create a service'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

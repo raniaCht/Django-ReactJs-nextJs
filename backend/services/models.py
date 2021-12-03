@@ -2,6 +2,10 @@ from django.db import models
 from serviceowners.models import ServiceOwner
 from django.utils.timezone import now
 
+from django.db.models.signals import pre_save, post_save
+
+from dzfetes.utils import unique_slug_generator
+
 class Service(models.Model):
     class ServiceCategory(models.TextChoices):
         PLACE = 'Place'
@@ -40,3 +44,10 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+
+def rl_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+
+pre_save.connect(rl_pre_save_receiver, sender=Service)
