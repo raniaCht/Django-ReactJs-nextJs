@@ -50,5 +50,16 @@
             font-weight: 400;
             letter-spacing: .1rem;
         }
+
+        .react-photo-gallery--gallery{ 
+            div {
+                justify-content: center;
+            }
+
+            img {
+                width: 30%;
+                height: auto;
+            }
+        }
     }
 }
