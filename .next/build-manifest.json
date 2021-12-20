@@ -25,15 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/login": [
+    "/dashboard": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/login.js"
+      "static/chunks/pages/dashboard.js"
     ],
-    "/newServiceOwner": [
+    "/service/[slug]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/newServiceOwner.js"
+      "static/chunks/pages/service/[slug].js"
     ]
   },
   "ampFirstPages": []

@@ -313,7 +313,8 @@ const Navbar = () => {
 
 
     return (
-        router.pathname == '/login' || router.pathname == '/register' ? null :
+        router.pathname == '/login' || router.pathname == '/register' || router.pathname == '/404' ?
+            null :
             <>
                 <Box sx={{ flexGrow: 1 }}>
                     <AppBar position="static" className='custom-navbar'>

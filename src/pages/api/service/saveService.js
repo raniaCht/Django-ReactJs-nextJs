@@ -12,7 +12,6 @@ export const config = {
 export default async (req, res) => {
     if (req.method === 'POST') {
         try {
-            console.log('donnnne')
             const cookies = cookie.parse(req.headers.cookie ?? '');
             const access = cookies.access ?? false;
             if (access === false) {
@@ -34,11 +33,6 @@ export default async (req, res) => {
                             console.log(k)
                             data.append(k, req.body[k])
                         }
-                        // data.append('name', req.body['name'])
-                        // data.append('photo', req.body['photo'])
-                        // data.append('email', req.body['email'])
-                        // data.append('phone', req.body['phone'])
-                        // data.append('description', req.body['description'])
                         resolve(data)
                     } else {
                         reject((err) => { return res.status(500).json({ error: err }) })
@@ -54,7 +48,6 @@ export default async (req, res) => {
                         },
                         body: data
                     })
-                    console.log(apiRes.status)
                     const dataJson = await apiRes.json();
                     if (apiRes.status === 201) {
                         return res.status(201).json({ success: dataJson.success });

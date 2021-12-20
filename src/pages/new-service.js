@@ -1,5 +1,5 @@
 import Layout from "../hocs/Layout"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import FormData from 'form-data'
 import Grid from '@mui/material/Grid';
@@ -24,6 +24,7 @@ const Input = styled('input')({
 
 const PageAddNewService = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const loading = useSelector(state => state.auth.loading);
 
@@ -40,14 +41,11 @@ const PageAddNewService = () => {
         let i = 0, m, list = []
         while (i < 20 && e.target.files.length > i) {
             m = {}
-            //console.log("lorem loremlorem lorem lorem lorem lorem lorem lorem lorem " + files.length)
             m[`photo_${i + 1}`] = await convertBase64(e.target.files[i])
             list.push(m)
             i++
         }
         setFiles(list)
-        for (let key in files)
-            console.log("=========== >< ===================" + key)
     }
     const upDatePhoto = async (e) => {
         const base64 = await convertBase64(e.target.files[0])
@@ -83,9 +81,9 @@ const PageAddNewService = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        // dispatch({
-        //     type: SET_AUTH_LOADING
-        // });
+        dispatch({
+            type: SET_AUTH_LOADING
+        });
         const body = new FormData()
         body.append('title', title)
         body.append('photo_main', photo)
@@ -110,19 +108,20 @@ const PageAddNewService = () => {
                 },
             })
                 .then(function (response) {
-                    // dispatch({
-                    //     type: REMOVE_AUTH_LOADING
-                    // });
+                    dispatch({
+                        type: REMOVE_AUTH_LOADING
+                    });
+
                 })
                 .catch(function (response) {
-                    // dispatch({
-                    //     type: REMOVE_AUTH_LOADING
-                    // });
+                    dispatch({
+                        type: REMOVE_AUTH_LOADING
+                    });
                 });
         } catch (err) {
-            // dispatch({
-            //     type: REMOVE_AUTH_LOADING
-            // });
+            dispatch({
+                type: REMOVE_AUTH_LOADING
+            });
         }
     };
     return (
