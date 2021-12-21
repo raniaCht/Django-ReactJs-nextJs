@@ -1,6 +1,6 @@
 import Layout from "../../hocs/Layout";
 import { useRouter } from "next/router";
-import { useEffect, useState, useLayoutEffect, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 
@@ -14,15 +14,7 @@ function columns(containerWidth) {
     return columns;
 }
 
-const Service = () => {
-    const targetRef = useRef();
-    const [dimensions, setDimensions] = useState(0);
-    useLayoutEffect(() => {
-        if (targetRef.current) {
-            console.log('dimensions' + targetRef.current.offsetWidth);
-            setDimensions(targetRef.current.offsetWidth);
-        }
-    }, []);
+const Service = ({ params }) => {
     const [photos, setPhotos] = useState([])
     const fillArray = (data) => {
         let list = []
@@ -54,8 +46,7 @@ const Service = () => {
 
     const [service, setService] = useState({})
     const router = useRouter();
-    const { slug } = router.query
-    console.log('  slug  :  ' + router.query);
+    const { slug } = params
     useEffect(() => {
         async function fetchMyAPI() {
             try {
@@ -94,8 +85,8 @@ const Service = () => {
                     <h2>{title}</h2>
                     <h3>{service.price}DA <span>/{service.unit_price}</span></h3>
                     <p>{service.description}</p>
-                    <div className="gallery" ref={targetRef}>
-                        <Gallery photos={photos} columns={dimensions} onClick={openLightbox} />
+                    <div className="gallery" >
+                        <Gallery photos={photos} onClick={openLightbox} />
                         <ModalGateway>
                             {viewerIsOpen ? (
                                 <Modal onClose={closeLightbox}>
@@ -115,6 +106,12 @@ const Service = () => {
             </div>
         </Layout>
     )
+}
+
+export function getServerSideProps(context) {
+    return {
+        props: { params: context.params }
+    };
 }
 
 export default Service;
