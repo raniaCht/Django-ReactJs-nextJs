@@ -61,6 +61,7 @@ const RegisterPage = () => {
                                 label="Name"
                                 variant="outlined"
                                 type='text'
+                                color='secondary'
                                 placeholder='Name'
                                 name='name'
                                 value={name}
@@ -72,6 +73,7 @@ const RegisterPage = () => {
                             <TextField
                                 label="Email"
                                 variant="outlined"
+                                color='secondary'
                                 type='email'
                                 placeholder='Example@example.com'
                                 name='email' value={email}
@@ -84,6 +86,7 @@ const RegisterPage = () => {
                                 label="Password"
                                 variant="outlined"
                                 type='password'
+                                color='secondary'
                                 placeholder='Password'
                                 name='password'
                                 value={password}
@@ -96,6 +99,7 @@ const RegisterPage = () => {
                             <TextField
                                 label="Confirm Password"
                                 variant="outlined"
+                                color='secondary'
                                 type='password'
                                 placeholder='Confirm Password'
                                 name='re_password'

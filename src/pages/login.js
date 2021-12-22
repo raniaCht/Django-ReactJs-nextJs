@@ -58,6 +58,7 @@ const LoginPage = () => {
                             <TextField
                                 label="Email"
                                 variant="outlined"
+                                color='secondary'
                                 type='email'
                                 placeholder='Example@example.com'
                                 name='email'
@@ -70,6 +71,7 @@ const LoginPage = () => {
                             <TextField
                                 label="Password"
                                 variant="outlined"
+                                color='secondary'
                                 type='password'
                                 placeholder='Password'
                                 name='password'
