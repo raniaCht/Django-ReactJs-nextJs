@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
+import { API_URL } from "../config";
 
 const CardService = ({ item }) => {
     return (
@@ -7,7 +8,7 @@ const CardService = ({ item }) => {
             <div className="container-product">
                 <div className="product">
                     <div className="product-img">
-                        <img src={item.photo_main} />
+                        <img src={(item.photo_main.includes(API_URL) ? item.photo_main : `${API_URL}${item.photo_main}`)} />
                     </div>
                     <div className="product-body">
                         <h4>{item.title}</h4>

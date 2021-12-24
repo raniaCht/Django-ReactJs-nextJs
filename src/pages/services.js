@@ -3,12 +3,25 @@ import CardService from "../components/card-service";
 import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL } from "../config/index";
 import fetch from 'node-fetch';
-import SearchIcon from '@material-ui/icons/Search';
-import { Search, StyledInputBase, SearchIconWrapper } from '../components/search-components'
-import { Button } from "@mui/material";
+import { SearchBox } from "../components/search-box";
+import { useState } from "react";
+import { SearchLocation } from "../components/search-location";
 
 export default function Services(props) {
-  const loading = useSelector(state => state.auth.loading)
+  const [services, setServices] = useState(props.services)
+  const [location, setLocation] = useState("")
+  const handleSearch = (term) => {
+    fetch('/api/service/search', {
+      method: "POST",
+      body: JSON.stringify({
+        term
+      })
+    }).then((res) => res.json())
+      .then(setServices)
+      .catch(console.log)
+  }
+
+
 
   return (
     <Layout
@@ -18,19 +31,10 @@ export default function Services(props) {
       <div className="services">
         <div className="services__container">
           <h1 className="services__title">The Services</h1>
-          <div className="services__search">
-            <Search className="services__search__input">
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
-            <Button type='submit' variant="outlined" color='secondary'>
-              <SearchIcon />
-            </Button>
-          </div>
+          <SearchBox onSearch={handleSearch} />
+          <SearchLocation location={location} onChange={setLocation} />
           <div className="services__list">
-            {props.services.map(item => <CardService item={item} />)}
+            {services.map(item => <CardService item={item} />)}
           </div>
         </div>
       </div>
@@ -42,7 +46,6 @@ export const getServerSideProps = async () => {
   try {
     const data = await fetch(`${SERVER_URL}/api/service/list`, {
       method: 'GET'
-
     });
     const json = await data.json();
     return {
