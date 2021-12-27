@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Service
-from .serializers import ServiceSerializer
+from .serializers import ServiceSerializer, ServiceDetailSerializer
 from rest_framework.views import APIView
 from serviceowners.models import ServiceOwner
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -28,7 +28,8 @@ class ServiceOwnerCreateView(APIView):
                 photo_main = self.base64_to_image(image_data)
                 title = data['title']
                 description = data['description']
-                price = data['price']
+                price = data['price'] 
+                wilaya = data['wilaya']
                 unit_price = data['unit_price']
                 category = data['category']
                 photo_1 = self.base64_to_image(request.POST.get('photo_1', None)) 
@@ -52,7 +53,7 @@ class ServiceOwnerCreateView(APIView):
                 photo_19 = self.base64_to_image(request.POST.get('photo_19', None))
                 photo_20 = self.base64_to_image(request.POST.get('photo_20', None))
                 service = Service.objects.create(
-                    title=title, photo_main=photo_main, description=description, price=price, 
+                    title=title, wilaya=wilaya, photo_main=photo_main, description=description, price=price, 
                     unit_price=unit_price, category=category, owner=owner, photo_1=photo_1, 
                     photo_2=photo_2, photo_3=photo_3, photo_4=photo_4, photo_5=photo_5,
                     photo_6=photo_6, photo_7=photo_7, photo_8=photo_8, photo_9=photo_9,
@@ -84,7 +85,32 @@ class ServiceOwnerCreateView(APIView):
             )
 
 class ServicesView(ListAPIView):
-    queryset = Service.objects.all()
     permission_classes = (permissions.AllowAny, )
+    queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     lookup_field = 'slug'
+
+class ServiceView(RetrieveAPIView):
+    queryset = Service.objects.all()
+    serializer_class = ServiceDetailSerializer
+    lookup_field = 'slug'
+
+class SearchView(APIView):
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = ServiceSerializer
+
+    def get(self, request):
+        queryset = Service.objects.all()
+        data = self.request
+        search = data.GET.get('search', None)
+        location = data.GET.get('location', None)
+        category = data.GET.get('type', None)
+        if (search):
+            queryset = queryset.filter(title__icontains=search)
+        if (location):
+            queryset = queryset.filter(wilaya__iexact=location)
+        if (category):
+            queryset = queryset.filter(category__iexact=category)
+        serializer = ServiceSerializer(queryset, many=True)
+
+        return Response(serializer.data)
