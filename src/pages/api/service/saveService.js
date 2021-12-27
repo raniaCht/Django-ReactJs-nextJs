@@ -28,7 +28,6 @@ export default async (req, res) => {
                         req.body = fields;
                         req.files = files;
                         const data = new FormData();
-                        console.log(req.body['title'])
                         for (let k in req.body) {
                             console.log(k)
                             data.append(k, req.body[k])

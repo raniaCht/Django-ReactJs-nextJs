@@ -1,6 +1,5 @@
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Wilayas } from '../lists/wilayas';
@@ -8,24 +7,27 @@ import { Wilayas } from '../lists/wilayas';
 export const SearchLocation = ({ onChange, location }) => {
     const handlaNewLocation = (e) => {
         e.preventDefault()
-
+        onChange(e)
+        console.log('wilaya' + location);
     }
     return (
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, minWidth: 150, width: "90%" }}>
+            <InputLabel id="select-wilaya-label">Wilaya</InputLabel>
             <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
+                labelId="select-wilaya-label"
+                id="select-wilaya"
                 value={location}
-                label="Age"
+                label="Wilaya"
+                name='wilaya'
                 onChange={handlaNewLocation}
+                color='secondary'
+                fullWidth
             >
-                <MenuItem value="">
+                <MenuItem value="All Willaya">
                     <em>All Wilaya</em>
                 </MenuItem>
                 {Wilayas.map(wilaya => (<MenuItem value={wilaya}>{wilaya}</MenuItem>))}
             </Select>
-            <FormHelperText>With label + helper text</FormHelperText>
         </FormControl>
     )
 }

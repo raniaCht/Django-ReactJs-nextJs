@@ -3,10 +3,20 @@ import { API_URL } from "../../../config";
 export default async ({ body, method }, res) => {
     if (method == "POST") {
         try {
-            const { term } = JSON.parse(body)
+            const { term, wilaya, type } = JSON.parse(body)
             let query = ""
             if (term) {
                 query += `&search=${term}`
+            }
+            if (wilaya) {
+                query += `&location=${wilaya.replace(" ", "+")}`;
+            }
+            if (type) {
+                if (type == -1) {
+                    query += `&type=`;
+                } else {
+                    query += `&type=${type.replace(" ", "+")}`;
+                }
             }
             if (query.length) {
                 query = query.substring(1)

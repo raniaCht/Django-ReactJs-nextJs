@@ -12,6 +12,7 @@ const CardService = ({ item }) => {
                     </div>
                     <div className="product-body">
                         <h4>{item.title}</h4>
+                        <span>{item.wilaya}</span>
                         <h5>{item.description}</h5>
                     </div>
                     <div className="product-foot">

@@ -18,22 +18,41 @@
             letter-spacing: .4rem;
         }
 
-        .services__search{
-            display: flex;
-            justify-content: center;
-            &__input{
-                border: .1rem solid $white-pink;
+        // .services__search{
+        //     display: flex;
+        //     justify-content: center;
+        //     flex-direction: column;
+            .services__box{
+                // display: flex;
+                // justify-content: center;
+                &__input{
+                    border: .1rem solid $white-pink;
+                }
+                input{
+                    padding-left: 1.5rem;
+                    width: 100%;
+                }
             }
-            input{
-                padding-left: 1.5rem;
-                width: 50rem;
-            }
-        }
+        //     &__select{
+        //         display: flex;
+        //         justify-content: center;
+        //         .dz-fetes-select{
+        //             width: 28rem;
+        //         }
+        //     }
+        // }
+        
 
         .services__list{
             display: flex;
             flex-wrap: wrap;
             margin: .5rem 0;
+
+            h1{
+                margin: 7rem auto;
+                font-size: 3rem;
+                color: $white-pink;
+            }
 
             .container-product{
                 flex: 0 0 33.33%;

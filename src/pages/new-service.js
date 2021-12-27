@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Save from '@material-ui/icons/Save';
 import Image from 'next/image'
+import { SearchLocation } from "../components/search-location";
 import {
     REMOVE_AUTH_LOADING,
     SET_AUTH_LOADING
@@ -51,7 +52,7 @@ const PageAddNewService = () => {
         const base64 = await convertBase64(e.target.files[0])
         setPhoto(base64);
     }
-    const { title, description, price, category, unit_price } = formData;
+    const { title, wilaya, description, price, category, unit_price } = formData;
 
     const onChange = (e) => (
         e.target.type == "file" ?
@@ -86,6 +87,7 @@ const PageAddNewService = () => {
         });
         const body = new FormData()
         body.append('title', title)
+        body.append('wilaya', wilaya)
         body.append('photo_main', photo)
         body.append('category', category)
         body.append('price', price)
@@ -162,6 +164,7 @@ const PageAddNewService = () => {
                                         required
                                         fullWidth
                                     />
+                                    <SearchLocation location={wilaya} onChange={onChange} />
                                     <TextField
                                         label="Price"
                                         variant="outlined"
