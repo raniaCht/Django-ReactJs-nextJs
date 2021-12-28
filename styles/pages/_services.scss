@@ -10,6 +10,14 @@
         padding: 1rem 0 ;
         margin: 5rem auto;
 
+        @include respond(phone){
+            width: 95%;
+        }
+
+        @include respond(tab-port){
+            width: 90%;
+        }
+
         .services__title{
             font-size: 3rem;
             text-align: center;
@@ -18,29 +26,44 @@
             letter-spacing: .4rem;
         }
 
-        // .services__search{
-        //     display: flex;
-        //     justify-content: center;
-        //     flex-direction: column;
+        .services__search{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
             .services__box{
-                // display: flex;
-                // justify-content: center;
+                display: flex;
+                justify-content: center;
+                margin: 16px 24px;
+
+                @include respond(small-phone){
+                    flex-direction: column;
+                }
+
                 &__input{
                     border: .1rem solid $white-pink;
+                    margin-left: 0;
+
+                    @include respond(small-phone){
+                        margin-bottom: .5rem;
+                    }
                 }
                 input{
                     padding-left: 1.5rem;
-                    width: 100%;
+                    // width: 100%;
                 }
             }
-        //     &__select{
-        //         display: flex;
-        //         justify-content: center;
-        //         .dz-fetes-select{
-        //             width: 28rem;
-        //         }
-        //     }
-        // }
+            &__select{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                .dz-fetes-select{
+                    width: 20rem;
+                    @include respond(phone){
+                        width: 100%;
+                    }
+                }
+            }
+        }
         
 
         .services__list{
@@ -58,6 +81,11 @@
                 flex: 0 0 33.33%;
                 max-width: 33.33%;
                 display: flex;
+
+                @include respond(phone){
+                    flex: 0 0 100%;
+                    max-width: 100%;
+                }
 
                 .product{
                     width: 100%;

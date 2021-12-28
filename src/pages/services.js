@@ -7,7 +7,6 @@ import { SearchBox } from "../components/search-box";
 import { useState } from "react";
 import { SearchLocation } from "../components/search-location";
 import { SearchCategory } from "../components/search-category"
-import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
   container: {
@@ -68,15 +67,13 @@ export default function Services(props) {
       <div className="services">
         <div className="services__container">
           <h1 className="services__title">The Services</h1>
-          <SearchBox onSearch={handleSearch} />
-          <Grid container spacing={24}>
-            <Grid item xs={4}>
+          <div className="services__search">
+            <SearchBox onSearch={handleSearch} />
+            <div className="services__search__select">
               <SearchLocation location={location} onChange={onChangeLocation} />
-            </Grid>
-            <Grid item xs={4}>
               <SearchCategory category={category} onChange={onChangeCategory} />
-            </Grid>
-          </Grid>
+            </div>
+          </div>
           <div className="services__list">
             {services.length ? services.map(item => <CardService item={item} />) : <h1>There are no services</h1>}
           </div>

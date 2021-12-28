@@ -11,7 +11,7 @@ export const SearchCategory = ({ onChange, category }) => {
         console.log('category' + category);
     }
     return (
-        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, minWidth: 150, width: "90%" }}>
+        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, width: "100%" }}>
             <InputLabel id="select-category-label">category</InputLabel>
             <Select
                 labelId="select-category-label"

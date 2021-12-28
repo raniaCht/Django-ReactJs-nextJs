@@ -11,7 +11,7 @@ export const SearchLocation = ({ onChange, location }) => {
         console.log('wilaya' + location);
     }
     return (
-        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, minWidth: 150, width: "90%" }}>
+        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, width: "90%" }}>
             <InputLabel id="select-wilaya-label">Wilaya</InputLabel>
             <Select
                 labelId="select-wilaya-label"

@@ -1,8 +1,10 @@
 @import 'abstracts/variables';
+@import 'abstracts/mixins';
 
 @import 'base/base';
 
 @import 'components/navbar';
+@import 'components/slider';
 
 @import 'pages/serviceOwnerProfile';
 @import 'pages/auth';

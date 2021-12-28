@@ -1,3 +1,4 @@
+import { Slider } from '../components/slider';
 import Layout from '../hocs/Layout';
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
       title='DZ Fêtes | Home'
       content='Home page for this auth tutorial on httpOnly cookies with json web tokens'
     >
+      <Slider />
       <div className='p-5 bg-light rounded-3'>
         <div className='container-fluid py-3'>
           <h1 className='display-5 fw-bold'>Home Page</h1>
