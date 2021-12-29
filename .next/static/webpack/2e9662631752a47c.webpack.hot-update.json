@@ -1,0 +1,1 @@
+{"c":["webpack"],"r":["pages/services"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2Fservices&absolutePagePath=D%3A%5CDjango-React-Next%5Cfrontend%5Csrc%5Cpages%5Cservices.js!","./src/components/search-category.js","./src/components/search-location.js","./src/lists/categories.js","./src/lists/wilayas.js","./src/pages/services.js"]}

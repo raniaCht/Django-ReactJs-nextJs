@@ -42,6 +42,7 @@
                 &__input{
                     border: .1rem solid $white-pink;
                     margin-left: 0;
+                    width: 37rem;
 
                     @include respond(small-phone){
                         margin-bottom: .5rem;
@@ -49,7 +50,6 @@
                 }
                 input{
                     padding-left: 1.5rem;
-                    // width: 100%;
                 }
             }
             &__select{

@@ -1,6 +1,19 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 
+export const fetchApi = (term, wilaya, type, setServices) => {
+    fetch('/api/service/search', {
+        method: "POST",
+        body: JSON.stringify({
+            term,
+            wilaya,
+            type
+        })
+    }).then((res) => res.json())
+        .then(setServices)
+        .catch(console.log)
+}
+
 export const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,

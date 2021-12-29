@@ -2,6 +2,8 @@ import AccountBalanceTwoToneIcon from '@mui/icons-material/AccountBalanceTwoTone
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import TapasIcon from '@mui/icons-material/Tapas';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
+import CheckroomIcon from '@mui/icons-material/Checkroom';
+import ViewComfyRoundedIcon from '@mui/icons-material/ViewComfyRounded';
 
 export const DrawerList = [
     {
@@ -10,18 +12,28 @@ export const DrawerList = [
         link: '/'
     },
     {
+        name: 'All Services',
+        icon: <ViewComfyRoundedIcon />,
+        link: '/services'
+    },
+    {
         name: 'Party Hall',
         icon: <AccountBalanceTwoToneIcon />,
-        link: '/PartyHalls'
+        link: '/services/Place'
     },
     {
         name: 'Food',
         icon: <TapasIcon />,
-        link: '/Food'
+        link: '/services/Food'
     },
     {
-        name: 'Clothes',
+        name: 'Clothe & Shoe',
+        icon: <CheckroomIcon />,
+        link: '/services/Clothe & Shoe'
+    },
+    {
+        name: 'Material',
         icon: <LocalMallIcon />,
-        link: '/Clothes'
+        link: '/services/Material'
     }
 ]

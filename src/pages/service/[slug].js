@@ -4,16 +4,6 @@ import { useEffect, useState, useCallback } from "react";
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 
-function columns(containerWidth) {
-    console.log('containerWidth' + containerWidth);
-    let columns = 1;
-    if (containerWidth >= 500) columns = 2;
-    if (containerWidth >= 900) columns = 3;
-    if (containerWidth >= 1500) columns = 4;
-    console.log('columns' + columns);
-    return columns;
-}
-
 const Service = ({ params }) => {
     const [photos, setPhotos] = useState([])
     const fillArray = (data) => {
