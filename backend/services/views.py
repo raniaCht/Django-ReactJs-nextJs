@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Service
+from serviceowners.models import ServiceOwner
 from .serializers import ServiceSerializer, ServiceDetailSerializer
 from rest_framework.views import APIView
 from serviceowners.models import ServiceOwner
@@ -111,6 +112,16 @@ class SearchView(APIView):
             queryset = queryset.filter(wilaya__iexact=location)
         if (category):
             queryset = queryset.filter(category__iexact=category)
+        serializer = ServiceSerializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+class MyServices(APIView):
+    serializer_class = ServiceSerializer
+
+    def get(self, request):
+        owner = ServiceOwner.objects.get(account=self.request.user)
+        queryset = Service.objects.filter(owner=owner)
         serializer = ServiceSerializer(queryset, many=True)
 
         return Response(serializer.data)
