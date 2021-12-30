@@ -46,7 +46,7 @@ const Service = ({ params }) => {
                 const data = await api.json()
                 setService(data)
                 fillArray(data)
-                if (api.status === 403) {
+                if (res.status === 403 || res.status === 401) {
                     router.push("/login");
                 }
                 if (api.status === 404) {

@@ -21,7 +21,6 @@ import MenuIcon from '@material-ui/icons/Menu'
 import LockOpenTwoToneIcon from '@material-ui/icons/LockOpenTwoTone';
 import AppRegistrationTwoToneIcon from '@mui/icons-material/AppRegistrationTwoTone';
 import LogoutIcon from '@mui/icons-material/Logout';
-import axios from 'axios'
 import { Search, StyledInputBase, SearchIconWrapper } from './search-components'
 
 const Navbar = () => {
@@ -32,29 +31,6 @@ const Navbar = () => {
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const menuId = 'primary-search-account-menu';
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleProfilePage = async (e) => {
-        e.preventDefault();
-        try {
-            await axios({
-                method: "POST",
-                url: "/api/ServiceOwner/me",
-            })
-                .then(function (response) {
-                    if (response.status === 200) {
-                        router.push({
-                            pathname: '/serviceOwnerProfile',
-                            query: response.data
-                        })
-                    }
-                })
-                .catch(function (response) {
-                    console.log(response);
-                });
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -80,18 +56,20 @@ const Navbar = () => {
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
-            <a className='link-navbar' onClick={e => handleProfilePage(e)}>
-                <IconButton
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    onClick={handleProfileMenuOpen}
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </a>
+            <Link href="/profile" passHref>
+                <a className='link-navbar'>
+                    <IconButton
+                        aria-label="account of current user"
+                        // aria-controls={menuId}
+                        // aria-haspopup="true"
+                        // onClick={handleProfileMenuOpen}
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Profile</p>
+                </a>
+            </Link>
             <a className='link-navbar' onClick={logoutHandler} href='#!'>
                 <IconButton
                     aria-label="account of current user"
@@ -148,18 +126,20 @@ const Navbar = () => {
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={(e) => handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
+            <Link href="/profile" passHref>
+                <MenuItem component="a">
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="primary-search-account-menu"
+                        aria-haspopup="true"
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Profile</p>
+                </MenuItem>
+            </Link>
             <MenuItem>
                 <IconButton
                     size="large"
