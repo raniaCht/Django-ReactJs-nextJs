@@ -125,3 +125,16 @@ class MyServices(APIView):
         serializer = ServiceSerializer(queryset, many=True)
 
         return Response(serializer.data)
+
+    def delete(self, request):
+        try:
+            Service.objects.get(id=self.request.data['id']).delete()
+            return Response(
+                {'success' : 'the service has been delete'},
+                status= status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'success': 'something went wrong when trying to delete a service'},
+                status= status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
