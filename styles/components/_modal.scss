@@ -1,0 +1,41 @@
+.modal-container{
+    @include flexCenter(row);
+    z-index: 1233;
+    height: 101vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: $linear-gradient;
+
+    .modal{
+        @include card();
+        padding: 5rem;
+        position: relative;
+
+        .close-modal-btn{
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .title{
+            font-size: 3rem;
+            color: $white;
+            font-weight: 500;
+            margin-bottom: 3rem;
+        }
+        .footer{
+            @include flexCenter(row);
+
+            button{
+                margin: 0 1rem;
+            }
+        }
+    }
+}
+
+.modal-open{
+    height: 100vh;
+    overflow: hidden;
+}

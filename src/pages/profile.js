@@ -10,16 +10,42 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL } from "../config";
 import { Modal } from "../components/modal";
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
+const ITEM_HEIGHT = 48;
 const Profile = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = (e, id) => {
+        window.scrollTo(0, 0)
+        setAnchorEl(null);
+        if (e.target.id == 'modify-poste') {
+            setTypeOfMethod('modify')
+        } else {
+            setTypeOfMethod("delete")
+        }
+        showModal(e, id)
+    };
     const router = useRouter()
     const [user, setUser] = useState({})
     const [postes, setPostes] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [thisPoste, setThisPoste] = useState({})
+    const [typeOfMethod, setTypeOfMethod] = useState('')
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
+    }, [openModal])
     const showModal = (e, id) => {
-        console.log(id);
         document.body.classList.add('modal-open')
         for (let index = 0; index < postes.length; index++) {
             if (postes[index].id === id) {
@@ -124,9 +150,41 @@ const Profile = () => {
                         {
                             postes.map(poste =>
                                 <div className="post">
-                                    <button className="post__edit" onClick={(e) => showModal(e, poste.id)}>
-                                        <ModeEditOutlineOutlinedIcon />
-                                    </button>
+                                    <div >
+                                        <IconButton
+                                            className="post__edit"
+                                            aria-label="more"
+                                            id="long-button"
+                                            aria-controls={open ? 'long-menu' : undefined}
+                                            aria-expanded={open ? 'true' : undefined}
+                                            aria-haspopup="true"
+                                            onClick={handleClick}
+                                        >
+                                            <MoreHorizIcon />
+                                        </IconButton>
+                                        <Menu
+                                            id="long-menu"
+                                            MenuListProps={{
+                                                'aria-labelledby': 'long-button',
+                                            }}
+                                            anchorEl={anchorEl}
+                                            open={open}
+                                            onClose={handleClose}
+                                            PaperProps={{
+                                                style: {
+                                                    maxHeight: ITEM_HEIGHT * 4.5,
+                                                    width: '20ch',
+                                                },
+                                            }}
+                                        >
+                                            <MenuItem key="Modify" id="modify-poste" onClick={(e) => handleClose(e, poste.id)} >
+                                                Modify
+                                            </MenuItem>
+                                            <MenuItem key="Delete" id="detele-poste" onClick={(e) => handleClose(e, poste.id)}>
+                                                Delete
+                                            </MenuItem>
+                                        </Menu>
+                                    </div>
                                     <h1 className="post__title">{poste.title}</h1>
                                     <span className="post__desciption">
                                         {poste.description}
@@ -140,7 +198,7 @@ const Profile = () => {
                     </div>
                 </main>
             </div>
-            {openModal && <Modal poste={thisPoste} />}
+            {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={() => console.log('hola')} />}
         </Layout>
     )
 }
