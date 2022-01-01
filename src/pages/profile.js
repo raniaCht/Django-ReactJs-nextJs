@@ -14,6 +14,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 const ITEM_HEIGHT = 48;
 const Profile = () => {
@@ -38,6 +39,23 @@ const Profile = () => {
     const [openModal, setOpenModal] = useState(false)
     const [thisPoste, setThisPoste] = useState({})
     const [typeOfMethod, setTypeOfMethod] = useState('')
+    const deletePoste = async (id) => {
+        try {
+            console.log(id)
+            const data = await fetch("/api/service/my", {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "DELETE",
+                body: JSON.stringify({ id })
+            })
+            const json = await data.json()
+            console.log(json);
+        } catch (error) {
+            console.log(error);
+        }
+        hideModal()
+    }
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -55,7 +73,7 @@ const Profile = () => {
         }
         setOpenModal(true)
     }
-    const hideModal = (e) => {
+    const hideModal = () => {
         document.body.classList.remove('modal-open')
         setOpenModal(false)
     }
@@ -110,7 +128,17 @@ const Profile = () => {
                             </div>
                         </div>
                         <div className="user-info">
-                            <h3 className="user-info_name">{user.name}</h3>
+                            <h3 className="user-info_name">
+                                {user.name}
+                                <IconButton
+                                    className="post__edit"
+                                    aria-label="more"
+                                    id="update-profile"
+                                    onClick={() => console.log("")}
+                                >
+                                    <EditOutlinedIcon />
+                                </IconButton>
+                            </h3>
                             <h4 className='user-info_desc'>{user.description}</h4>
                             <div className="user-info_links">
                                 <a className="link" href="www.facebook.com" target="_blank">
@@ -198,7 +226,7 @@ const Profile = () => {
                     </div>
                 </main>
             </div>
-            {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={() => console.log('hola')} />}
+            {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={deletePoste} />}
         </Layout>
     )
 }
