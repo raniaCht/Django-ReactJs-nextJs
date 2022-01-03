@@ -15,6 +15,9 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { UpdateProfile } from '../components/update-profile'
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { Divider } from "@material-ui/core";
 
 const ITEM_HEIGHT = 48;
 const Profile = () => {
@@ -23,6 +26,7 @@ const Profile = () => {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = (e, id) => {
         window.scrollTo(0, 0)
         setAnchorEl(null);
@@ -37,6 +41,7 @@ const Profile = () => {
     const [user, setUser] = useState({})
     const [postes, setPostes] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [openUpdateProfile, setOpenUpdateProfile] = useState(false)
     const [thisPoste, setThisPoste] = useState({})
     const [typeOfMethod, setTypeOfMethod] = useState('')
     const deletePoste = async (id) => {
@@ -62,7 +67,7 @@ const Profile = () => {
             left: 0,
             behavior: "smooth"
         });
-    }, [openModal])
+    }, [openModal, openUpdateProfile])
     const showModal = (e, id) => {
         document.body.classList.add('modal-open')
         for (let index = 0; index < postes.length; index++) {
@@ -73,9 +78,17 @@ const Profile = () => {
         }
         setOpenModal(true)
     }
+    const showUpdateProfile = (e) => {
+        document.body.classList.add('modal-open')
+        setOpenUpdateProfile(true)
+    }
     const hideModal = () => {
         document.body.classList.remove('modal-open')
         setOpenModal(false)
+    }
+    const hideUpdateProfile = () => {
+        document.body.classList.remove('modal-open')
+        setOpenUpdateProfile(false)
     }
     useEffect(async () => {
         try {
@@ -116,15 +129,23 @@ const Profile = () => {
     }, [])
     return (
         <Layout
-            title='Dz Fêtes | Register'
+            title='Dz Fêtes | Profile'
             content='Resiger page for this auth tutorial on httpOnly cookies'
         >
             <div className="profile">
                 <header className="profile__header">
+                    <div className="profile__header__cover"></div>
                     <div className="profile__header__info">
                         <div className="cader-image">
                             <div className="user-img">
                                 <img src={user.photo} alt="" />
+                                <div className="btn-change">
+                                    <label for="file-input">
+                                        <PhotoCameraIcon />
+                                        <span>change image</span>
+                                    </label>
+                                    <input id="file-input" type="file" />
+                                </div>
                             </div>
                         </div>
                         <div className="user-info">
@@ -134,7 +155,7 @@ const Profile = () => {
                                     className="post__edit"
                                     aria-label="more"
                                     id="update-profile"
-                                    onClick={() => console.log("")}
+                                    onClick={showUpdateProfile}
                                 >
                                     <EditOutlinedIcon />
                                 </IconButton>
@@ -227,6 +248,7 @@ const Profile = () => {
                 </main>
             </div>
             {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={deletePoste} />}
+            {openUpdateProfile && <UpdateProfile owner={user} concelMethod={hideUpdateProfile} />}
         </Layout>
     )
 }

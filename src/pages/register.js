@@ -35,8 +35,6 @@ const RegisterPage = () => {
 
     const onSubmit = e => {
         e.preventDefault();
-
-        console.log(1)
         if (dispatch && dispatch !== null && dispatch !== undefined)
             dispatch(register(name, email, password, re_password));
     };

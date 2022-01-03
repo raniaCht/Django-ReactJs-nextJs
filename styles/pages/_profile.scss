@@ -5,22 +5,38 @@
     background: $white;
 
     &__header{
-        height: 300px;
-        background-image: url(../../public/images/BG_Annaba.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        height: auto;
+        min-height: 30rem;
+        display: flex;
+        flex-direction: column;
         position: relative;
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
+        &__cover{
+            height: 25rem;
+            background-image: url(../../public/images/BG_Annaba.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+
+            @include respond(phone){
+                height: 15rem;
+            }
+        }
+
         &__info{
             background: $total-white;
-            height: 100px;
+            height: auto;
             width: 100%;
-            position: absolute;
-            bottom: 0;
             display: flex;
             justify-content: center;
+            padding-bottom: 2rem;
+            z-index: 1;
+
+            @include respond(small-phone){
+                flex-direction: column;
+            }
 
             .cader-image{
                 width: 200px;
@@ -28,6 +44,14 @@
                 position: relative;
                 display: flex;
                 justify-content: center;
+
+                @include respond(phone){
+                    width: 130px;
+                }
+
+                @include respond(small-phone){
+                    width: 100%;
+                }
 
                 .user-img{
                     border-radius: 50%;
@@ -42,6 +66,45 @@
                     top: -50px;
                     background: $total-white;
 
+                    &:hover{
+                        .btn-change{
+                            display: block;
+                        }
+                    }
+
+                    @include respond(phone){
+                        width: 100px;
+                        height: 100px;
+                        position: relative;
+                        top: 0;
+                        margin-top: 1rem;
+                    }
+
+                    .btn-change{
+                        z-index: 2;
+                        position: absolute;
+                        width: 102%;
+                        bottom: -1px;
+                        border: 0;
+                        outline: none;
+                        background: $color-dark;
+                        display: none;
+                        color: $total-white;
+
+                        label{
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            padding: .3rem 1rem 1.3rem;
+                            cursor: pointer;
+                        }
+
+                        input{
+                            display: none;
+                        }
+                    }
+
                     img{
                         border-radius: 50%;
                         height:100%;
@@ -55,13 +118,29 @@
                 height: 100%;
                 padding: 10px 0 5px;
 
+                @include respond (phone){
+                    width: 70%;
+                }
+
+                @include respond(small-phone){
+                    width: 100%;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+
                 &_name{
                     font-size: 2.5rem;
                     font-weight: 600;
+                    @include respond(small-phone){
+                        text-align: center;
+                    }
                 }
                 &_desc{
                     font-weight: 400;
                     font-size: 1.1rem;
+                    @include respond(small-phone){
+                        text-align: center;
+                    }
                 }
                 &_links{
                     display: flex;
@@ -70,6 +149,10 @@
                     justify-content: flex-start;
                     align-items: center;
                     margin-top: 10px;
+
+                    @include respond(small-phone){
+                        justify-content: center;
+                    }
                     .link{
                         display: flex;
                         justify-content: space-around;
@@ -95,10 +178,20 @@
         justify-content: center;
         padding-top: 3rem;
 
+        @include respond(phone){
+            flex-direction: column;
+            padding-top: 1rem;
+        }
+
         &__sidebar{
             width: 20%;
             display: flex;
             justify-content: center;
+            @include respond(phone){
+                width: 100%;
+                justify-content: flex-start;
+                padding: 0 3rem 2rem;
+            }
 
             .info-contact{
                 display: flex;
@@ -127,6 +220,10 @@
             align-items: center;
             padding: 0 1rem;
             overflow-x: hidden;
+
+            @include respond(phone){
+                width: 100%;
+            }
 
             .post{
                 background: $total-white;

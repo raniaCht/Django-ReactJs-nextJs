@@ -33,7 +33,7 @@ export default async (req, res) => {
             });
         }
     } else {
-        res.setHeader('Allow', ['GET']);
+        res.setHeader('Allow', ['POST']);
         return res.status(405).json({
             error: `Method ${req.method} not allowed`
         });
