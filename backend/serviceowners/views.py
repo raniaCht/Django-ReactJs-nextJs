@@ -1,13 +1,14 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework import permissions, status
 from .models import ServiceOwner
-from .serializers import ServiceOwnerSerializer
+from .serializers import ServiceOwnerSerializer, ServiceOwnerUpdateInfoSerializer, ServiceOwnerUpdatePhotoSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import base64
 from uuid import uuid4
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
+from django.http import QueryDict
 
 class ServiceOwnerListView(ListAPIView):
     permission_classes = (permissions.AllowAny, )
@@ -67,3 +68,31 @@ class ServiceOwnerCreateView(APIView):
                 {'error': 'Something went wrong when trying to register as a service owner'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class ServiceOwnerUpdateInfo(APIView):
+    def put(self, request):
+        try:
+            owner = ServiceOwner.objects.get(account=self.request.user)
+        except owner.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if self.request.method == "PUT":
+            print(request.data['name'])
+            serializer = ServiceOwnerUpdateInfoSerializer(owner, data=self.request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                            {'success' : 'Service owner update successfully'},
+                            status=status.HTTP_200_OK
+                        )
+            else:
+                print(serializer.errors)
+                return Response(
+                            serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+
+class ServiceOwnerUpdatePhoto(APIView):
+    def put(self, request):
+        pass

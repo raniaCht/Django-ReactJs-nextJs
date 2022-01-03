@@ -79,7 +79,6 @@ class ServiceOwnerCreateView(APIView):
                     status=status.HTTP_404_NOT_FOUND
                 )
         except Exception as e:
-            print(e)
             return Response(
                 {'error': 'Something went wrong when trying to create a service'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -128,12 +127,14 @@ class MyServices(APIView):
 
     def delete(self, request):
         try:
+            print("self.request.data['id']",self.request.data['id'])
             Service.objects.get(id=self.request.data['id']).delete()
             return Response(
                 {'success' : 'the service has been delete'},
                 status= status.HTTP_200_OK
             )
-        except:
+        except Exception as e:
+            print(e)
             return Response(
                 {'success': 'something went wrong when trying to delete a service'},
                 status= status.HTTP_500_INTERNAL_SERVER_ERROR
