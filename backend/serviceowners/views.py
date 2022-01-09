@@ -9,7 +9,8 @@ from uuid import uuid4
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.http import QueryDict
-
+import os
+from django.core.files.storage import default_storage
 class ServiceOwnerListView(ListAPIView):
     permission_classes = (permissions.AllowAny, )
     queryset = ServiceOwner.objects.all()
@@ -77,12 +78,43 @@ class ServiceOwnerUpdateInfo(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if self.request.method == "PUT":
-            print(request.data['name'])
             serializer = ServiceOwnerUpdateInfoSerializer(owner, data=self.request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(
                             {'success' : 'Service owner update successfully'},
+                            status=status.HTTP_200_OK
+                        )
+            else:
+                return Response(
+                            serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+
+class ServiceOwnerUpdatePhoto(APIView):
+    def base64_to_image(self, base64_string):
+        format, imgstr = base64_string.split(';base64,')
+        ext = format.split('/')[-1]
+        return ContentFile(base64.b64decode(imgstr), name=uuid4().hex + "." + ext)
+
+    def put(self, request):
+        try:
+            owner = ServiceOwner.objects.get(account=self.request.user)
+        except owner.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if self.request.method == "PUT":
+            if (default_storage.exists(str(owner.photo))):
+                os.remove(owner.photo.path)
+            photo = self.base64_to_image(self.request.data['photo'])
+            serializer = ServiceOwnerUpdatePhotoSerializer(owner, data= { "photo": photo})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                            {
+                                'photo' : '/media/'+str(ServiceOwner.objects.get(account=self.request.user).photo)
+                            },
                             status=status.HTTP_200_OK
                         )
             else:
@@ -92,7 +124,3 @@ class ServiceOwnerUpdateInfo(APIView):
                             status=status.HTTP_400_BAD_REQUEST
                         )
 
-
-class ServiceOwnerUpdatePhoto(APIView):
-    def put(self, request):
-        pass

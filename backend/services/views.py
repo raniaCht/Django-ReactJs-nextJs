@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from .models import Service
 from serviceowners.models import ServiceOwner
-from .serializers import ServiceSerializer, ServiceDetailSerializer
+from .serializers import ServiceSerializer, ServiceDetailSerializer, ServiceUpdateInfoSerializer
 from rest_framework.views import APIView
-from serviceowners.models import ServiceOwner
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -118,6 +117,27 @@ class SearchView(APIView):
 class MyServices(APIView):
     serializer_class = ServiceSerializer
 
+    def put(self, request):
+        try:
+            service = Service.objects.get(id=self.request.data['id'])
+        except Service.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if self.request.method == "PUT":
+            serializer = ServiceUpdateInfoSerializer(service, data=self.request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                            {'success' : 'Service owner update successfully'},
+                            status=status.HTTP_200_OK
+                        )
+            else:
+                return Response(
+                            serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+
+
     def get(self, request):
         owner = ServiceOwner.objects.get(account=self.request.user)
         queryset = Service.objects.filter(owner=owner)
@@ -127,7 +147,6 @@ class MyServices(APIView):
 
     def delete(self, request):
         try:
-            print("self.request.data['id']",self.request.data['id'])
             Service.objects.get(id=self.request.data['id']).delete()
             return Response(
                 {'success' : 'the service has been delete'},

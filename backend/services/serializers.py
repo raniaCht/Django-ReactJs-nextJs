@@ -11,3 +11,8 @@ class ServiceDetailSerializer(serializers.ModelSerializer):
         model = Service
         fields = '__all__'
         lookup_field = 'slug'
+
+class ServiceUpdateInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ('title', 'price', 'description', 'wilaya', 'unit_price', 'category', )
