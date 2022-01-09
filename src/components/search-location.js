@@ -4,14 +4,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Wilayas } from '../lists/wilayas';
 
-export const SearchLocation = ({ onChange, location }) => {
+export const SearchLocation = ({ onChange, location, className }) => {
     const handlaNewLocation = (e) => {
         e.preventDefault()
         onChange(e)
-        console.log('wilaya' + location);
     }
     return (
-        <FormControl className='dz-fetes-select' sx={{ my: 2, mx: 3, width: "90%" }}>
+        <FormControl className={className} sx={{ my: 2, mx: 3, width: "90%" }}>
             <InputLabel id="select-wilaya-label">Wilaya</InputLabel>
             <Select
                 labelId="select-wilaya-label"

@@ -5,7 +5,7 @@ import { API_URL } from "../config";
 const CardService = ({ item }) => {
     return (
         <Link href={`/service/${item.slug}`}>
-            <div className="container-product">
+            <div className="container-product" key={item.id}>
                 <div className="product">
                     <div className="product-img">
                         <img src={(item.photo_main.includes(API_URL) ? item.photo_main : `${API_URL}${item.photo_main}`)} />

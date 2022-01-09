@@ -164,7 +164,7 @@ const PageAddNewService = () => {
                                         required
                                         fullWidth
                                     />
-                                    <SearchLocation location={wilaya} onChange={onChange} />
+                                    <SearchLocation className='dz-fetes-select' location={wilaya} onChange={onChange} />
                                     <TextField
                                         label="Price"
                                         variant="outlined"

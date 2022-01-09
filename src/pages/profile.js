@@ -1,5 +1,6 @@
 import Layout from "../hocs/Layout";
 import { useRouter } from "next/router"
+import { useSelector, useDispatch } from "react-redux";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -10,56 +11,70 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { API_URL } from "../config";
 import { Modal } from "../components/modal";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { UpdateProfile } from '../components/update-profile'
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { Divider } from "@material-ui/core";
+import { convertBase64 } from "../functions";
+import { SET_AUTH_LOADING, REMOVE_AUTH_LOADING } from "../actions/types";
+import CircularProgress from '@mui/material/CircularProgress';
+import { Poste } from "../components/poste";
 
-const ITEM_HEIGHT = 48;
+
 const Profile = () => {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    const dispatch = useDispatch()
+    const loading = useSelector(state => state.auth.loading)
 
-    const handleClose = (e, id) => {
+    const handleClose = (e, setAnchorEl, id) => {
         window.scrollTo(0, 0)
         setAnchorEl(null);
         if (e.target.id == 'modify-poste') {
-            setTypeOfMethod('modify')
+            setTypeOfMethod('PUT')
         } else {
-            setTypeOfMethod("delete")
+            setTypeOfMethod("DELETE")
         }
         showModal(e, id)
     };
     const router = useRouter()
     const [user, setUser] = useState({})
+    const [userPhoto, setUserPhoto] = useState("")
     const [postes, setPostes] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [openUpdateProfile, setOpenUpdateProfile] = useState(false)
     const [thisPoste, setThisPoste] = useState({})
     const [typeOfMethod, setTypeOfMethod] = useState('')
-    const deletePoste = async (id) => {
+    const [msgError, setMsgError] = useState('')
+    const methodToApply = async (id, newData) => {
         try {
-            console.log(id)
+            dispatch({
+                type: SET_AUTH_LOADING,
+            });
+            const { title, wilaya, description, price, category, unit_price } = newData
             const data = await fetch("/api/service/my", {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                method: "DELETE",
-                body: JSON.stringify({ id })
+                method: (typeOfMethod === "PUT" ? "PUT" : "DELETE"),
+                body: JSON.stringify({ id, title, wilaya, description, price, category, unit_price })
             })
             const json = await data.json()
-            console.log(json);
+            if (data.status === 200) {
+                dispatch({
+                    type: REMOVE_AUTH_LOADING,
+                });
+                hideModal()
+            } else {
+                dispatch({
+                    type: REMOVE_AUTH_LOADING,
+                });
+                setMsgError(json.error)
+            }
         } catch (error) {
+            dispatch({
+                type: REMOVE_AUTH_LOADING,
+            });
             console.log(error);
         }
-        hideModal()
     }
     useEffect(() => {
         window.scrollTo({
@@ -69,7 +84,9 @@ const Profile = () => {
         });
     }, [openModal, openUpdateProfile])
     const showModal = (e, id) => {
+        setMsgError('')
         document.body.classList.add('modal-open')
+        console.log(id);
         for (let index = 0; index < postes.length; index++) {
             if (postes[index].id === id) {
                 setThisPoste(postes[index])
@@ -97,7 +114,10 @@ const Profile = () => {
                     withCredentials: true,
                 }
             )
-                .then(res => setUser(res.data))
+                .then(res => {
+                    setUser(res.data)
+                    setUserPhoto(res.data.photo)
+                })
                 .catch(error => {
                     if (error.response.status === 403 || error.response.status === 401) {
                         router.push("/login");
@@ -109,6 +129,39 @@ const Profile = () => {
         }
     }, [])
 
+    const changePhoto = async (e) => {
+        try {
+            dispatch({
+                type: SET_AUTH_LOADING,
+            });
+            const body = new FormData()
+            await convertBase64(e.target.files[0])
+                .then(async (base64) => {
+                    body.append('photo', base64)
+                    debugger
+                    await fetch('/api/ServiceOwner/update-photo', {
+                        method: "PUT",
+                        body: body
+                    }).then(res => {
+                        dispatch({
+                            type: REMOVE_AUTH_LOADING,
+                        })
+                        if (res.status === 200) {
+                            router.reload(window.location.pathname)
+                        } else {
+                            throw new Error('Something went wrong');
+                        }
+                    }).catch(err => dispatch({
+                        type: REMOVE_AUTH_LOADING,
+                    }))
+                })
+        } catch (err) {
+            dispatch({
+                type: REMOVE_AUTH_LOADING,
+            })
+        }
+    }
+
     useEffect(async () => {
         try {
             await axios.post('/api/service/my',
@@ -116,7 +169,9 @@ const Profile = () => {
                     withCredentials: true,
                 }
             )
-                .then(res => setPostes(res.data))
+                .then(res => {
+                    setPostes(res.data)
+                })
                 .catch(error => {
                     if (error.response.status === 403 || error.response.status === 401) {
                         router.push("/login");
@@ -138,14 +193,20 @@ const Profile = () => {
                     <div className="profile__header__info">
                         <div className="cader-image">
                             <div className="user-img">
-                                <img src={user.photo} alt="" />
-                                <div className="btn-change">
-                                    <label for="file-input">
-                                        <PhotoCameraIcon />
-                                        <span>change image</span>
-                                    </label>
-                                    <input id="file-input" type="file" />
-                                </div>
+                                <img src={(userPhoto.includes(API_URL) ? userPhoto : `${API_URL}${userPhoto}`)} alt="" />
+                                {
+                                    loading ? (
+                                        <CircularProgress color="secondary" className="user-img-load" />
+                                    ) : (
+                                        <div className="btn-change">
+                                            <label htmlFor="file-input">
+                                                <PhotoCameraIcon />
+                                                <span>change image</span>
+                                            </label>
+                                            <input id="file-input" onChange={changePhoto} type="file" />
+                                        </div>
+                                    )
+                                }
                             </div>
                         </div>
                         <div className="user-info">
@@ -198,58 +259,15 @@ const Profile = () => {
                     <div className="profile__content__posts">
                         {
                             postes.map(poste =>
-                                <div className="post">
-                                    <div >
-                                        <IconButton
-                                            className="post__edit"
-                                            aria-label="more"
-                                            id="long-button"
-                                            aria-controls={open ? 'long-menu' : undefined}
-                                            aria-expanded={open ? 'true' : undefined}
-                                            aria-haspopup="true"
-                                            onClick={handleClick}
-                                        >
-                                            <MoreHorizIcon />
-                                        </IconButton>
-                                        <Menu
-                                            id="long-menu"
-                                            MenuListProps={{
-                                                'aria-labelledby': 'long-button',
-                                            }}
-                                            anchorEl={anchorEl}
-                                            open={open}
-                                            onClose={handleClose}
-                                            PaperProps={{
-                                                style: {
-                                                    maxHeight: ITEM_HEIGHT * 4.5,
-                                                    width: '20ch',
-                                                },
-                                            }}
-                                        >
-                                            <MenuItem key="Modify" id="modify-poste" onClick={(e) => handleClose(e, poste.id)} >
-                                                Modify
-                                            </MenuItem>
-                                            <MenuItem key="Delete" id="detele-poste" onClick={(e) => handleClose(e, poste.id)}>
-                                                Delete
-                                            </MenuItem>
-                                        </Menu>
-                                    </div>
-                                    <h1 className="post__title">{poste.title}</h1>
-                                    <span className="post__desciption">
-                                        {poste.description}
-                                    </span>
-                                    <div className="post__image">
-                                        <img src={`${API_URL}${poste.photo_main}`} />
-                                    </div>
-                                </div>
+                                <Poste poste={poste} handleClose={handleClose} key={poste.id} />
                             )
                         }
                     </div>
-                </main>
-            </div>
-            {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={deletePoste} />}
+                </main >
+            </div >
+            {openModal && <Modal type={typeOfMethod} poste={thisPoste} concelMethod={hideModal} confirmMethod={methodToApply} msgError={msgError} />}
             {openUpdateProfile && <UpdateProfile owner={user} concelMethod={hideUpdateProfile} />}
-        </Layout>
+        </Layout >
     )
 }
 

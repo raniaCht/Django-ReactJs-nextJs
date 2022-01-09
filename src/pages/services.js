@@ -41,7 +41,7 @@ export default function Services(props) {
           <div className="services__search">
             <SearchBox onSearch={handleSearch} />
             <div className="services__search__select">
-              <SearchLocation location={location} onChange={onChangeLocation} />
+              <SearchLocation className='dz-fetes-select' location={location} onChange={onChangeLocation} />
               <SearchCategory category={category} onChange={onChangeCategory} />
             </div>
           </div>
